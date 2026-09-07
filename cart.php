@@ -201,7 +201,7 @@
 								<p class="cart_total_price"><?php echo $total;?>$</p>
 							</td>
 							<td class="cart_delete" >
-								<a class="cart_quantity_delete" href="delete_cart.php?id=<?php echo $value['id']; ?>"><i class="fa fa-times"></i></a>
+								<a class="cart_quantity_delete" id="<?php echo $value['id']; ?>"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
 						<?php } ?>
@@ -498,6 +498,23 @@
 				updownItem(this, false);
 			});
 		});
+
+		$(document).ready(function(){
+			$('.cart_quantity_delete').click(function(e){
+				e.preventDefault(e);
+				let getId = this.getAttribute('id');
+				let tr = $(this).closest('tr');
+				$.ajax({
+					url: 'delete_cart.php',
+					type: 'post',
+					data:{
+						id: getId
+					}
+				}).done(function(rs){
+					tr.remove();
+				})
+			})
+		})
 
 		
 	</script>
