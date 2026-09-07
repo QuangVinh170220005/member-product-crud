@@ -373,25 +373,7 @@
 					
 					</div>
 				</div>
-				<script>
-					$(document).ready(function(){
-						$('.add-to-cart').click(function(e){
-							e.preventDefault();
-							let getId = this.getAttribute('id');
-							console.log('id sp: ', getId);
-
-							$.ajax({
-								url: 'xuly_cart.php',
-								type: 'post',
-								data:{
-									id: getId
-								}
-							}).done(function(rusult){
-								console.log(rusult)
-							})
-						})
-					})
-				</script>
+				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Features Items</h2>
@@ -981,5 +963,24 @@
 	<script src="js/price-range.js"></script>
     <script src="js/jquery.prettyPhoto.js"></script>
     <script src="js/main.js"></script>
+	<script>
+					$(document).ready(function(){
+						$('.add-to-cart').click(function(e){
+							e.preventDefault();
+							let getId = this.getAttribute('id');
+							console.log('id sp: ', getId);
+
+							$.ajax({
+								url: 'xuly_cart.php',
+								type: 'post',
+								data:{
+									id: getId,
+								}
+							}).done(function(rusult){
+								console.log(rusult)
+							})
+						})
+					})
+				</script>
 </body>
 </html>

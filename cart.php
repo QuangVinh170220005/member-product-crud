@@ -173,9 +173,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach($product as $value){
-								$total = $value['price'] * $value['qty'];
-								$sub_total += $total;
+						<?php
+							$sub_total = 0; 
+							foreach($product as $value){
+								 $total = $value['price'] * $value['qty'];
+								 $sub_total += $total;
 							?>
 						<tr>
 							<td class="cart_product">
@@ -190,16 +192,16 @@
 							</td>
 							<td class="cart_quantity">
 								<div class="cart_quantity_button">
-									<a class="cart_quantity_up" href=""> + </a>
+									<a class="cart_quantity_up"> + </a>
 									<input class="cart_quantity_input" type="text" name="quantity" value="<?php echo $value['qty']; ?>" autocomplete="off" size="2">
-									<a class="cart_quantity_down" href=""> - </a>
+									<a class="cart_quantity_down" > - </a>
 								</div>
 							</td>
 							<td class="cart_total">
-								<p class="cart_total_price"><?php echo $total; ?>$</p>
+								<p class="cart_total_price"><?php echo $total;?>$</p>
 							</td>
-							<td class="cart_delete">
-								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+							<td class="cart_delete" >
+								<a class="cart_quantity_delete" href="delete_cart.php?id=<?php echo $value['id']; ?>"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
 						<?php } ?>
@@ -445,11 +447,59 @@
 	</footer><!--/Footer-->
 	
 
-
     <script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.scrollUp.min.js"></script>
     <script src="js/jquery.prettyPhoto.js"></script>
     <script src="js/main.js"></script>
+	<script>
+		function updownItem(item, check){
+			let tr = item.closest('tr');
+			let input = tr.querySelector('input');
+			let price = tr.querySelector('.cart_price p').textContent.trim();
+			let total = tr.querySelector('.cart_total_price');
+			let getId = tr.querySelector('.cart_description p').textContent.trim();
+			let id = getId.replace("Web ID: ", "");
+
+			if(check){
+				input.value = Number(input.value) + 1;
+			}else{
+				if(Number(input.value)<= 1){
+					alert('Không xóa product cuối');
+					return;
+				}
+				input.value = Number(input.value) - 1;
+			}
+			price = price.replace("$", "");
+			let newTotal = Number(price) * input.value;
+			total.textContent = newTotal + '$';
+
+			$.ajax({
+				url: 'update_cart.php',
+				type: 'post',
+				data:{
+					id: id,
+					check : check
+				}
+			}).done(function(result){
+				console.log(result);
+			})
+		}
+
+		const cartUp = document.querySelectorAll('.cart_quantity_up').forEach(function(btn) {
+			btn.addEventListener('click', function(e) {
+				e.preventDefault();
+				updownItem(this, true);
+			});
+		});
+		const cartDown = document.querySelectorAll('.cart_quantity_down').forEach(function(btn) {
+			btn.addEventListener('click', function(e) {
+				e.preventDefault();
+				updownItem(this, false);
+			});
+		});
+
+		
+	</script>
 </body>
 </html>
