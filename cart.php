@@ -275,7 +275,7 @@
 				<div class="col-sm-6">
 					<div class="total_area">
 						<ul>
-							<li>Cart Sub Total <span><?php echo $sub_total;?>$</span></li>
+							<li>Cart Sub Total <span id="sub_total"><?php echo $sub_total;?>$</span></li>
 							<li>Eco Tax <span>$2</span></li>
 							<li>Shipping Cost <span>Free</span></li>
 							<li>Total <span>$61</span></li>
@@ -490,12 +490,14 @@
 			btn.addEventListener('click', function(e) {
 				e.preventDefault();
 				updownItem(this, true);
+				tongtien()
 			});
 		});
 		const cartDown = document.querySelectorAll('.cart_quantity_down').forEach(function(btn) {
 			btn.addEventListener('click', function(e) {
 				e.preventDefault();
 				updownItem(this, false);
+				tongtien()
 			});
 		});
 
@@ -504,6 +506,7 @@
 				e.preventDefault(e);
 				let getId = this.getAttribute('id');
 				let tr = $(this).closest('tr');
+				
 				$.ajax({
 					url: 'delete_cart.php',
 					type: 'post',
@@ -512,10 +515,20 @@
 					}
 				}).done(function(rs){
 					tr.remove();
+					tongtien();
 				})
 			})
 		})
-
+		function tongtien(){
+			let  total = document.getElementById('sub_total');
+			let itemTotal = document.querySelectorAll('.cart_total_price');
+			let sum = 0;
+			itemTotal.forEach(function(item){
+				let price = item.textContent.replace('$','').trim();
+				sum += Number(price);
+			})
+			total.textContent = sum + '$';
+		}
 		
 	</script>
 </body>

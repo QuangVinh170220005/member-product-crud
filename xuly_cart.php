@@ -7,6 +7,7 @@
 
         $sql = "SELECT * FROM products WHERE id = $id";
         $result = $conn -> query($sql);
+        $total = 0;
 
         if($result -> num_rows > 0){
             $product = $result -> fetch_assoc();
@@ -17,6 +18,11 @@
                 $product['qty'] = 1;
                 $_SESSION['cart'][$id] = $product;
             }
+            foreach ($_SESSION['cart'] as $value){
+                $total += $value['qty'];
+            }
+            echo $total;
+            
         }
     }
 ?>
